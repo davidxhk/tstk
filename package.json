@@ -1,0 +1,50 @@
+{
+  "name": "tstk",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Type safety made simple.",
+  "author": "David Xie",
+  "license": "MIT",
+  "homepage": "https://github.com/davidxhk/tstk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidxhk/tstk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidxhk/tstk/issues"
+  },
+  "keywords": [
+    "typescript",
+    "tools",
+    "utils"
+  ],
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.1.0",
+    "@davidxhk/prettier-config": "^1.0.0",
+    "eslint": "^9.19.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}
