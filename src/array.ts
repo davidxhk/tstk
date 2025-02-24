@@ -5,4 +5,4 @@ import { isArray } from "./utils"
 /**
  * Check if a value is an array of T
  */
-export const array = <const T extends Any>(type: T) => (value: unknown): value is Type<T>[] => isArray(value) && Array.from(value).every(elem => is(elem, type))
+export const array = <const T extends Any>(type: T) => (value: unknown): value is Type<T>[] => isArray(value) && value.every(elem => is(elem, type))

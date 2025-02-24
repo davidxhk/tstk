@@ -4,4 +4,4 @@ import { is } from "./is"
 /**
  * Filter T with U and return only the elements that did not match
  */
-export const reject = <const T extends SomeArray, U extends Any>(value: T, type: U): Reject<T, Type<U>> => Array.from(value).filter(elem => !is(elem, type)) as Reject<T, Type<U>>
+export const reject = <const T extends SomeArray, U extends Any>(value: T, type: U): Reject<T, Type<U>> => value.filter(elem => !is(elem, type)) as Reject<T, Type<U>>
