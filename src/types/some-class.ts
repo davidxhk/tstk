@@ -1,6 +1,6 @@
 import type { Class } from "./class"
 
 /**
- * A generic class that is assignable to any class constructor
+ * A catch-all type to which any class constructor is assignable
  */
 export type SomeClass = Class<unknown>

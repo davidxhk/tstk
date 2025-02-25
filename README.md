@@ -14,10 +14,10 @@ npm install tstk
 
 ## Usage
 
-The heart of **tstk** is the `is` function. It allows you to validate values against an extensive range of type descriptors, including primitives, literal values, classes, predicates, arrays, records, tuples, and even complex schemas.
+The heart of **tstk** is the `is` function. It allows you to validate values against an extensive range of type descriptors including primitives, literals, classes, predicates, arrays, records, tuples, and simple to complex schemas.
 
 ```ts
-// Primitive types
+// Primitive type
 is("hello", "string") // => true (value is string)
 is(42, "number") // => true (value is number)
 is(1n, "bigint") // => true (value is bigint)
@@ -35,17 +35,17 @@ is(0, "any") // => true (value is any)
 is(null, "null") // => true (value is null)
 is(undefined, "undefined") // => true (value is undefined)
 
-// Literal types
+// Literal type
 is("hello", "hello") // => true (value is "hello")
 is(42, "hello") // => false
 is("string", literal("string")) // => true (value is "string")
 is("hello", literal("string")) // => false
 
-// Class instance
+// Class type
 is(new Date(), Date) // => true (value is Date)
 is(/regex/, RegExp) // => true (value is RegExp)
 
-// Type predicate
+// Union type
 is("test", union("string", "number")) // => true (value is string | number)
 is(123, union("number", "null")) // => true (value is number | null)
 
@@ -63,7 +63,7 @@ is({ b: 1 }, record(["a"], "number")) // => false
 is(["foo", 10, true], ["string", "number", "boolean"]) // => true (value is [string, number, boolean])
 is(["foo", 10], ["string", "number", "boolean"]) // => false
 
-// Schema type
+// Simple schema
 is({ a: 1 }, { a: "number" }) // => true (value is { a: number })
 is({ a: "1" }, { a: "number" }) // => false
 
@@ -128,7 +128,8 @@ const data = {
   ],
 }
 
-is(data, profileSchema) // => true (value is {
+is(data, profileSchema) // => true
+// => value is {
 //   id: string
 //   name: string
 //   email: string
@@ -151,7 +152,7 @@ is(data, profileSchema) // => true (value is {
 //     tags: string[]
 //   }[]
 //   friends: Record<"id" | "name", string>[]
-// })
+// }
 ```
 
 ## API

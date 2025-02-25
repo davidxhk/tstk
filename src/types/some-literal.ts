@@ -1,6 +1,6 @@
 import type { Literal } from "./literal"
 
 /**
- * A generic literal that is assignable to any literal wrapper
+ * A catch-all type to which any literal wrapper is assignable
  */
 export type SomeLiteral = Literal<unknown>

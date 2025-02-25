@@ -1,6 +1,6 @@
 import type { Predicate } from "./predicate"
 
 /**
- * A generic predicate that is assignable to any type predicate
+ * A catch-all type to which any type predicate is assignable
  */
 export type SomePredicate = Predicate<unknown>

@@ -1,4 +1,4 @@
 /**
- * A generic record that is assignable to any record type
+ * A catch-all type to which any record type is assignable
  */
 export type SomeRecord = Record<keyof any, unknown>
