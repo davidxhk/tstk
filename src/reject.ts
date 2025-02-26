@@ -1,5 +1,5 @@
 import type { Any, Reject, SomeArray, Type } from "./types"
-import { is } from "./is"
+import { is } from "."
 
 /**
  * Filter T with U and return only the elements that did not match

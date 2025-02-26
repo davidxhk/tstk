@@ -1,4 +1,4 @@
-import type { IsReadonly } from "./is-readonly"
+import type { IsReadonly } from "."
 
 /**
  * Extract from T all readonly keys

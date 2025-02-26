@@ -1,4 +1,4 @@
-import type { Tuple } from "./tuple"
+import type { Tuple } from "."
 
 /**
  * Merge a tuple of types T into a single type, with last taking precedence

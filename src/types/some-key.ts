@@ -1,5 +1,4 @@
-import type { Key } from "./key"
-import type { SomeRecord } from "./some-record"
+import type { Key, SomeRecord } from "."
 
 /**
  * A catch-all type to which any key descriptor is assignable

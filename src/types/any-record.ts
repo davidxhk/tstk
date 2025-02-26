@@ -1,5 +1,4 @@
-import type { Any } from "./any"
-import type { Property } from "./property"
+import type { Any, Property } from "."
 
 /**
  * A record descriptor representing a record that has a set of properties

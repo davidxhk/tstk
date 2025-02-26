@@ -1,4 +1,4 @@
-import type { EmptyRecord } from "./empty-record"
+import type { EmptyRecord } from "."
 
 /**
  * Return `true` if K is an optional key of T, and `false` otherwise

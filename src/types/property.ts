@@ -1,4 +1,4 @@
-import type { Any } from "./any"
+import type { Any } from "."
 
 /**
  * A property descriptor that may contain a type and be marked optional and/or readonly

@@ -1,9 +1,4 @@
-import type { IsOptional } from "./is-optional"
-import type { IsReadonly } from "./is-readonly"
-import type { Literal } from "./literal"
-import type { PickOneAs } from "./pick-one-as"
-import type { PropertyType } from "./property-type"
-import type { UnionToIntersection } from "./union-to-intersection"
+import type { IsOptional, IsReadonly, Literal, PickOneAs, PropertyType, UnionToIntersection } from "."
 
 /**
  * Map properties in T to keys in M

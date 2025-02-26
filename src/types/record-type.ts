@@ -1,7 +1,4 @@
-import type { AnyRecord } from "./any-record"
-import type { PropertyType } from "./property-type"
-import type { Simplify } from "./simplify"
-import type { UnionToIntersection } from "./union-to-intersection"
+import type { AnyRecord, PropertyType, Simplify, UnionToIntersection } from "."
 
 /**
  * Cast a record descriptor T to its corresponding type

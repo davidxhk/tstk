@@ -18,4 +18,19 @@ export { remap } from "./remap"
 export { tuple } from "./tuple"
 export type * from "./types"
 export { union } from "./union"
-export { isPropertyKey as propertyKey } from "./utils"
+export {
+  isAny as any,
+  isAnyRecord as anyRecord,
+  isAnyTuple as anyTuple,
+  getProp,
+  getProps,
+  hasProp,
+  isObject as object,
+  property,
+  isPropertyKey as propertyKey,
+  isArray as someArray,
+  isClass as someClass,
+  isFunction as someFunction,
+  isLiteral as someLiteral,
+  isRecord as someRecord,
+} from "./utils"

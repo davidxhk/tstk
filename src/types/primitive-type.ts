@@ -1,7 +1,4 @@
-import type { Primitive } from "./primitive"
-import type { SomeArray } from "./some-array"
-import type { SomeFunction } from "./some-function"
-import type { SomeRecord } from "./some-record"
+import type { Primitive, SomeArray, SomeFunction, SomeRecord } from "."
 
 /**
  * Cast a primitive descriptor T to its corresponding type

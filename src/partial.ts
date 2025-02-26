@@ -1,5 +1,5 @@
 import type { AnyRecord, PartialRecord } from "./types"
-import { optional } from "./optional"
+import { optional } from "."
 import { getProps } from "./utils"
 
 /**

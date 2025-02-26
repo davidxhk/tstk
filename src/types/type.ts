@@ -1,20 +1,4 @@
-import type { Any } from "./any"
-import type { AnyRecord } from "./any-record"
-import type { AnyTuple } from "./any-tuple"
-import type { EmptyRecord } from "./empty-record"
-import type { EmptyTuple } from "./empty-tuple"
-import type { IsEmpty } from "./is-empty"
-import type { LiteralType } from "./literal-type"
-import type { PredicateType } from "./predicate-type"
-import type { Primitive } from "./primitive"
-import type { PrimitiveType } from "./primitive-type"
-import type { RecordType } from "./record-type"
-import type { SomeArray } from "./some-array"
-import type { SomeClass } from "./some-class"
-import type { SomeLiteral } from "./some-literal"
-import type { SomePredicate } from "./some-predicate"
-import type { SomeRecord } from "./some-record"
-import type { TupleType } from "./tuple-type"
+import type { Any, AnyRecord, AnyTuple, EmptyRecord, EmptyTuple, IsEmpty, LiteralType, PredicateType, Primitive, PrimitiveType, RecordType, SomeArray, SomeClass, SomeLiteral, SomePredicate, SomeRecord, TupleType } from "."
 
 /**
  * Cast a type descriptor T into its corresponding type

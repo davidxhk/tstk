@@ -1,4 +1,4 @@
-import type { Void } from "./void"
+import type { Void } from "."
 
 /**
  * Construct from T a type where properties in R are required, properties in O are optional, and the rest are undefined

@@ -1,5 +1,5 @@
 import type { AnyTuple, Type } from "./types"
-import { is } from "./is"
+import { is } from "."
 
 /**
  * Check if a value is a union of T

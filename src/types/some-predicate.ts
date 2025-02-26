@@ -1,4 +1,4 @@
-import type { Predicate } from "./predicate"
+import type { Predicate } from "."
 
 /**
  * A catch-all type to which any type predicate is assignable

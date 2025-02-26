@@ -1,6 +1,5 @@
 import type { Any, KeyType, SomeKey, Type } from "./types"
-import { has } from "./has"
-import { is } from "./is"
+import { has, is } from "."
 import { getProps, isArray, isRecord } from "./utils"
 
 /**

@@ -1,9 +1,4 @@
-import type { AnyRecord } from "./any-record"
-import type { AnyTuple } from "./any-tuple"
-import type { EmptyTuple } from "./empty-tuple"
-import type { SomeClass } from "./some-class"
-import type { SomeLiteral } from "./some-literal"
-import type { SomePredicate } from "./some-predicate"
+import type { AnyRecord, AnyTuple, EmptyTuple, SomeClass, SomeLiteral, SomePredicate } from "."
 
 /**
  * A type descriptor representing any possible type except `undefined`

@@ -1,4 +1,4 @@
-import type { IsOptional } from "./is-optional"
+import type { IsOptional } from "."
 
 /**
  * Extract from T all optional keys

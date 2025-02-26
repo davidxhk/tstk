@@ -1,5 +1,4 @@
-import type { Predicate } from "./predicate"
-import type { SomePredicate } from "./some-predicate"
+import type { Predicate, SomePredicate } from "."
 
 /**
  * Extract from T the type that it checks

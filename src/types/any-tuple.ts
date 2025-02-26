@@ -1,5 +1,4 @@
-import type { Any } from "./any"
-import type { Tuple } from "./tuple"
+import type { Any, Tuple } from "."
 
 /**
  * A tuple descriptor representing a tuple of types

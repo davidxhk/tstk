@@ -1,5 +1,4 @@
-import type { SomeArray } from "./some-array"
-import type { UnionToIntersection } from "./union-to-intersection"
+import type { SomeArray, UnionToIntersection } from "."
 
 /**
  * Extract from T all elements that extend U

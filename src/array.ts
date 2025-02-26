@@ -1,5 +1,5 @@
 import type { Any, Type } from "./types"
-import { is } from "./is"
+import { is } from "."
 import { isArray } from "./utils"
 
 /**

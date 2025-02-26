@@ -1,5 +1,4 @@
-import type { SomeArray } from "./some-array"
-import type { SomeRecord } from "./some-record"
+import type { SomeArray, SomeRecord } from "."
 
 /**
  * Return `true` if T is an empty string, record, or array, and `false` otherwise

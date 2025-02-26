@@ -1,5 +1,5 @@
 import type { Key, KeyType } from "./types"
-import { is } from "./is"
+import { is } from "."
 import { getProp, getProps, isArray } from "./utils"
 
 /**

@@ -1,6 +1,4 @@
-import type { Any } from "./any"
-import type { EmptyRecord } from "./empty-record"
-import type { Property } from "./property"
+import type { Any, Property } from "."
 
 /**
  * Construct from T a normalized property descriptor
@@ -22,4 +20,4 @@ export type AsProperty<T extends Any | Property | undefined> =
                 ? { readonly: true }
                 : T extends Any
                   ? { type: T }
-                  : EmptyRecord
+                  : { type?: Any, optional?: true, readonly?: true }

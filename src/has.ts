@@ -1,6 +1,6 @@
 import type { Any, Property, PropertyType } from "./types"
-import { is } from "./is"
-import { asProperty, hasProp, isAny, isObject, isReadonly } from "./utils"
+import { is } from "."
+import { hasProp, isAny, isObject, isReadonly, property } from "./utils"
 
 /**
  * Check if a value has K of T
@@ -8,7 +8,7 @@ import { asProperty, hasProp, isAny, isObject, isReadonly } from "./utils"
 export function has<const K extends PropertyKey>(value: unknown, prop: K): value is PropertyType<K>
 export function has<const K extends PropertyKey, const T extends Any | Property>(value: unknown, prop: K, type: T): value is PropertyType<K, T>
 export function has<const K extends PropertyKey, const T extends Any | Property>(value: unknown, prop: K, type?: T): value is PropertyType<K, T | undefined> {
-  const propType = asProperty(type)
+  const propType = property(type)
 
   if (!isObject(value)) {
     return false

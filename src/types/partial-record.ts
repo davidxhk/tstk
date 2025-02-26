@@ -1,5 +1,4 @@
-import type { AnyRecord } from "./any-record"
-import type { AsOptional } from "./as-optional"
+import type { AnyRecord, AsOptional } from "."
 
 /**
  * Construct from T a record descriptor whose properties are all marked optional

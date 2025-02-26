@@ -1,4 +1,4 @@
-import type { IsEqual } from "./is-equal"
+import type { IsEqual } from "."
 
 /**
  * Return `true` if K is a readonly key of T, and `false` otherwise

@@ -1,6 +1,5 @@
 import type { PickOneAs, Remap } from "./types"
-import { getProp, hasProp } from "./utils"
-import { getProps } from "./utils/get-props"
+import { getProp, getProps, hasProp } from "./utils"
 
 /**
  * Remap T according to M

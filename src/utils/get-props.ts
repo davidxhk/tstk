@@ -1,3 +1,6 @@
-import { asInteger } from "./as-integer"
+import { integer } from "."
 
-export const getProps = <T extends object>(object: T): (keyof T)[] => Reflect.ownKeys(object).map(prop => (asInteger(prop) || prop) as keyof T)
+/**
+ * Get all properties of T
+ */
+export const getProps = <T extends object>(object: T): (keyof T)[] => Reflect.ownKeys(object).map(prop => (integer(prop) || prop) as keyof T)

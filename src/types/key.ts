@@ -1,5 +1,4 @@
-import type { Predicate } from "./predicate"
-import type { Tuple } from "./tuple"
+import type { Predicate, Tuple } from "."
 
 /**
  * A key descriptor representing a set of keys of T or any key type

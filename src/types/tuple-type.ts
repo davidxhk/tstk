@@ -1,6 +1,4 @@
-import type { Any } from "./any"
-import type { AnyTuple } from "./any-tuple"
-import type { Type } from "./type"
+import type { Any, AnyTuple, Type } from "."
 
 /**
  * Cast a tuple descriptor T to its corresponding type

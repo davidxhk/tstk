@@ -1,6 +1,4 @@
-import type { Any } from "./any"
-import type { Property } from "./property"
-import type { Type } from "./type"
+import type { Any, Property, Type } from "."
 
 /**
  * Construct from T a property type with key K

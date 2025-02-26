@@ -1,5 +1,5 @@
 import type { Any, Filter, SomeArray, Type } from "./types"
-import { is } from "./is"
+import { is } from "."
 
 /**
  * Filter T with U and return only the elements that match
