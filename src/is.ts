@@ -1,10 +1,10 @@
 import type { Any, Type } from "./types"
-import { isArray, isClass, isExact, isFunction, isLiteral, isObject, isRecord } from "./utils"
+import { isArray, isClass, isFunction, isLiteral, isMatch, isObject, isRecord } from "./utils"
 
 /**
  * Check if a value is T
  */
-export function is<const T extends Any>(value: unknown, type: T): value is Type<T> {
+export function is<const T extends Any>(value: unknown, type: T, exact = true): value is Type<T> {
   switch (typeof type) {
     case "string":
       switch (type) {
@@ -69,11 +69,11 @@ export function is<const T extends Any>(value: unknown, type: T): value is Type<
       }
 
       if (isRecord(type)) {
-        return isRecord(value) && isExact(value, type)
+        return isRecord(value) && isMatch(value, type, exact)
       }
 
       if (isArray(type)) {
-        return isArray(value) && isExact(value, type)
+        return isArray(value) && isMatch(value, type, exact)
       }
 
     // eslint-disable-next-line no-fallthrough

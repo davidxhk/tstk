@@ -1,7 +1,7 @@
 {
   "name": "tstk",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Type safety made simple.",
   "author": "David Xie",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "tools",
     "utils"
   ],
+  "sideEffects": false,
   "exports": {
     "import": {
       "types": "./dist/index.d.ts",

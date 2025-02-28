@@ -1,13 +1,6 @@
 import type { Any } from "../src/types"
 import { describe, expect, it } from "vitest"
-import { array } from "../src/array"
-import { is } from "../src/is"
-import { literal } from "../src/literal"
-import { optional } from "../src/optional"
-import { primitive } from "../src/primitive"
-import { record } from "../src/record"
-import { tuple } from "../src/tuple"
-import { union } from "../src/union"
+import { array, is, joint, literal, optional, partial, pick, primitive, record, tuple, union } from "../src"
 import * as values from "./values"
 
 describe("the is function", () => {
@@ -118,67 +111,98 @@ describe("the is function", () => {
   })
 
   it("can check for complex schema", () => {
-    // Check for complex schema
-    const profileSchema = {
-      id: primitive("string"),
-      name: primitive("string"),
+    const user = {
+      userid: primitive("string"),
       email: primitive("string"),
-      age: optional("number"),
-      isActive: primitive("boolean"),
-      roles: array(union("admin", "editor", "viewer")),
-      address: record(["street", "city", "zipcode", "country"], "string"),
-      preferences: {
-        theme: union("light", "dark"),
-        notifications: {
-          email: primitive("boolean"),
-          sms: optional("boolean"),
-        },
-      },
-      posts: array({
-        id: "string",
-        title: "string",
-        content: "string",
-        publishedAt: optional(Date),
-        tags: array("string"),
-      }),
-      friends: array(record(["id", "name"], "string")),
+      name: primitive("string"),
+      age: primitive("number"),
+      deleted: primitive("boolean"),
     }
 
-    const data = {
-      id: "user-123",
-      name: "Jane Doe",
-      email: "jane@example.com",
-      age: 28,
-      isActive: true,
-      roles: ["editor"],
-      address: {
-        street: "123 Maple St",
-        city: "Springfield",
-        zipcode: "12345",
-        country: "USA",
+    const address = record(["street", "city", "zipcode", "country"], "string")
+
+    const settings = {
+      theme: union("light", "dark"),
+      notifications: partial(record(["email", "sms"], "boolean")),
+    }
+
+    const role = union("admin", "editor", "viewer")
+
+    const post = {
+      id: primitive("string"),
+      title: primitive("string"),
+      body: primitive("string"),
+      attachment: optional("string"),
+      publishedAt: primitive("number"),
+      tags: array("string"),
+    }
+
+    const friend = joint(
+      pick(user, ["userid", "name"]),
+      { startedAt: primitive("number") },
+    )
+
+    const profile = {
+      user,
+      address,
+      settings,
+      roles: array(role),
+      posts: array(post),
+      friends: array(friend),
+    }
+
+    const data = JSON.parse(`{
+      "user": {
+        "userid": "12345",
+        "email": "johndoe@example.com",
+        "name": "John Doe",
+        "age": 30,
+        "deleted": false
       },
-      preferences: {
-        theme: "dark",
-        notifications: {
-          email: true,
-          sms: false,
-        },
+      "address": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "zipcode": "12345",
+        "country": "USA"
       },
-      posts: [
+      "roles": ["admin", "viewer"],
+      "settings": {
+        "theme": "dark",
+        "notifications": {
+          "email": true
+        }
+      },
+      "posts": [
         {
-          id: "post-1",
-          title: "Hello World",
-          content: "This is my first post!",
-          publishedAt: new Date(),
-          tags: ["introduction", "welcome"],
+          "id": "post1",
+          "title": "First Post",
+          "body": "This is the content of the first post.",
+          "attachment": "http://example.com/attachment1.jpg",
+          "publishedAt": 1672531200000,
+          "tags": ["tech", "news"]
         },
+        {
+          "id": "post2",
+          "title": "Second Post",
+          "body": "This is the content of the second post.",
+          "publishedAt": 1672617600000,
+          "tags": ["life", "personal"]
+        }
       ],
-      friends: [
-        { id: "user-456", name: "John Smith" },
-        { id: "user-789", name: "Alice Johnson" },
-      ],
-    }
+      "friends": [
+        {
+          "userid": "67890",
+          "name": "Jane Smith",
+          "startedAt": 1672444800000
+        },
+        {
+          "userid": "54321",
+          "name": "Alice Johnson",
+          "startedAt": 1672358400000
+        }
+      ]
+    }`)
 
-    expect(is(data, profileSchema)).toBe(true)
+    expect(is(data, profile)).toBe(true)
   })
 })

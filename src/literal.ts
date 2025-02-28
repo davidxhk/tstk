@@ -1,6 +1,6 @@
 import { Literal } from "./utils"
 
 /**
- * Specify a literal value
+ * Define a literal type
  */
-export const literal = <const T>(value: T): Literal<T> => new Literal(value)
+export const literal = <const T>(type: T): Literal<T> => new Literal(type)
