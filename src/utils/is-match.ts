@@ -1,8 +1,8 @@
-import type { Any, AnyRecord, AnyTuple, EmptyTuple, Property, Type } from "../types"
-import { getProps, hasProp, isObject } from "."
-import { has } from "../has"
+import type { Descriptor, EmptyTuple, Property, RecordDescriptor, TupleDescriptor, Type } from "../types"
+import { isIn, isObject, keys } from "."
+import { is } from "../is"
 
 /**
  * Check if a value matches T
  */
-export const isMatch = <T extends AnyRecord | AnyTuple | EmptyTuple>(value: unknown, type: T, exact: boolean): value is Type<T> => isObject(value) && (!exact || getProps(value).every(prop => hasProp(type, prop))) && getProps(type).every(prop => has(value, prop, type[prop] as Any | Property))
+export const isMatch = <T extends RecordDescriptor | TupleDescriptor | EmptyTuple>(value: unknown, type: T, exact: boolean): value is Type<T> => isObject(value) && keys(type).every(<K extends keyof T>(prop: K) => isIn(value, prop) && is(value[prop], type[prop] as Property | Descriptor, exact)) && (!exact || keys(value).every(prop => isIn(type, prop)))

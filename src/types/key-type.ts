@@ -6,8 +6,8 @@ import type { Predicate, SomeKey, SomeTuple, Type } from "."
 export type KeyType<K extends SomeKey> =
   SomeKey extends K
     ? PropertyKey
-    : K extends "string" | "number" | "symbol" | Predicate<PropertyKey>
-      ? Type<K>
-      : K extends SomeTuple
-        ? K[number]
+    : K extends SomeTuple
+      ? K[number]
+      : K extends "string" | "number" | "symbol" | Predicate<PropertyKey>
+        ? Type<K>
         : never

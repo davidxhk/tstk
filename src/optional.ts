@@ -1,6 +1,6 @@
-import type { Any, AsOptional, Property } from "./types"
+import type { AsOptional, Descriptor, Property } from "./types"
 import { merge } from "."
-import { property } from "./utils"
+import { asProperty } from "./utils"
 
 interface OptionalFn {
   /**
@@ -11,15 +11,15 @@ interface OptionalFn {
   /**
    * Define an optional property of T
    */
-  <const T extends Any | Property>(type: T): AsOptional<T>
+  <const T extends Property | Descriptor>(type: T): AsOptional<T>
 
   /**
    * Define an optional property of T
    */
-  <const T extends Any | Property>(type?: T): AsOptional<T | undefined>
+  <const T extends Property | Descriptor>(type?: T): AsOptional<T | undefined>
 }
 
 /**
  * Define an optional property
  */
-export const optional: OptionalFn = <const T extends Any | Property>(type?: T): AsOptional<T | undefined> => merge(property(type), { optional: true as const })
+export const optional: OptionalFn = <const T extends Property | Descriptor>(type?: T): AsOptional<T | undefined> => merge(asProperty(type), { optional: true as const })

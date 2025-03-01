@@ -1,4 +1,5 @@
-import type { Literal, SomeLiteral } from "."
+import type { SomeLiteral } from "."
+import type { Literal } from "../utils"
 
 /**
  * Extract from T its literal value

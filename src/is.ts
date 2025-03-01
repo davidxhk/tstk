@@ -1,27 +1,27 @@
-import type { Any, Type } from "./types"
-import { isArray, isClass, isFunction, isLiteral, isMatch, isObject, isRecord } from "./utils"
+import type { Descriptor, Type } from "./types"
+import { isAny, isArray, isBigInt, isBoolean, isClass, isFunction, isInstance, isLiteral, isMatch, isNumber, isObject, isRecord, isString, isSymbol } from "./utils"
 
 /**
- * Check if a value is T
+ * Check if a value is T, allowing extra properties if exact is `false`
  */
-export function is<const T extends Any>(value: unknown, type: T, exact = true): value is Type<T> {
+export function is<const T extends Descriptor>(value: unknown, type: T, exact = true): value is Type<T> {
   switch (typeof type) {
     case "string":
       switch (type) {
         case "string":
-          return typeof value === "string"
+          return isString(value)
 
         case "number":
-          return typeof value === "number"
+          return isNumber(value)
 
         case "bigint":
-          return typeof value === "bigint"
+          return isBigInt(value)
 
         case "boolean":
-          return typeof value === "boolean"
+          return isBoolean(value)
 
         case "symbol":
-          return typeof value === "symbol"
+          return isSymbol(value)
 
         case "object":
           return isObject(value)
@@ -36,7 +36,7 @@ export function is<const T extends Any>(value: unknown, type: T, exact = true): 
           return isArray(value)
 
         case "any":
-          return true
+          return isAny(value)
 
         case "null":
           return value === null
@@ -54,14 +54,14 @@ export function is<const T extends Any>(value: unknown, type: T, exact = true): 
 
     case "function":
       if (isClass(type)) {
-        return value instanceof type
+        return isInstance(value, type)
       }
 
       return type(value)
 
     case "object":
       if (type === null) {
-        return value === type
+        return value === null
       }
 
       if (isLiteral(type)) {
@@ -73,7 +73,7 @@ export function is<const T extends Any>(value: unknown, type: T, exact = true): 
       }
 
       if (isArray(type)) {
-        return isArray(value) && isMatch(value, type, exact)
+        return isArray(value) && isMatch(value, type, true)
       }
 
     // eslint-disable-next-line no-fallthrough

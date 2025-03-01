@@ -1,10 +1,10 @@
-import type { Any } from "../src/types"
+import type { Descriptor } from "../src/types"
 import { describe, expect, it } from "vitest"
 import { array, is, joint, literal, optional, partial, pick, primitive, record, tuple, union } from "../src"
 import * as values from "./values"
 
 describe("the is function", () => {
-  function expectIsTrue(type: Any, ...expected: any[]) {
+  function expectIsTrue(type: Descriptor, ...expected: any[]) {
     for (const value of values.all) {
       expect(is(value, type)).toBe(expected.includes(value))
     }
@@ -62,10 +62,7 @@ describe("the is function", () => {
   })
 
   it("can check for a union of a record and an array", () => {
-    const schema = union(
-      record("string", "number"),
-      array("number"),
-    )
+    const schema = union(record("string", "number"), array("number"))
 
     expect(is({ a: 1, b: 2 }, schema)).toBe(true)
     expect(is([1, 2, 3], schema)).toBe(true)
@@ -74,10 +71,7 @@ describe("the is function", () => {
   })
 
   it("can check for a tuple containing a union and a record", () => {
-    const schema = tuple(
-      union("string", "number"),
-      record("string", union("boolean", "number")),
-    )
+    const schema = tuple(union("string", "number"), record("string", union("boolean", "number")))
 
     expect(is(["test", { active: true, count: 5 }], schema)).toBe(true)
     expect(is([42, { active: false }], schema)).toBe(true)
@@ -111,7 +105,7 @@ describe("the is function", () => {
   })
 
   it("can check for complex schema", () => {
-    const user = {
+    const User = {
       userid: primitive("string"),
       email: primitive("string"),
       name: primitive("string"),
@@ -119,16 +113,16 @@ describe("the is function", () => {
       deleted: primitive("boolean"),
     }
 
-    const address = record(["street", "city", "zipcode", "country"], "string")
+    const Address = record(["street", "city", "zipcode", "country"], "string")
 
-    const settings = {
+    const Settings = {
       theme: union("light", "dark"),
       notifications: partial(record(["email", "sms"], "boolean")),
     }
 
-    const role = union("admin", "editor", "viewer")
+    const Role = union("admin", "editor", "viewer")
 
-    const post = {
+    const Post = {
       id: primitive("string"),
       title: primitive("string"),
       body: primitive("string"),
@@ -137,18 +131,18 @@ describe("the is function", () => {
       tags: array("string"),
     }
 
-    const friend = joint(
-      pick(user, ["userid", "name"]),
+    const Friend = joint(
+      pick(User, ["userid", "name"]),
       { startedAt: primitive("number") },
     )
 
-    const profile = {
-      user,
-      address,
-      settings,
-      roles: array(role),
-      posts: array(post),
-      friends: array(friend),
+    const Profile = {
+      user: User,
+      address: Address,
+      settings: Settings,
+      roles: array(Role),
+      posts: array(Post),
+      friends: array(Friend),
     }
 
     const data = JSON.parse(`{
@@ -203,6 +197,11 @@ describe("the is function", () => {
       ]
     }`)
 
-    expect(is(data, profile)).toBe(true)
+    expect(is(data, Profile)).toBe(true)
   })
+})
+
+it("allows extra properties if exact is false", () => {
+  expect(is({ foo: 1, bar: 2 }, { foo: "number" })).toBe(false)
+  expect(is({ foo: 1, bar: 2 }, { foo: "number" }, false)).toBe(true)
 })

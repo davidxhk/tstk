@@ -1,8 +1,8 @@
-import type { AnyRecord, AsPartial } from "./types"
+import type { AsPartial, RecordDescriptor } from "./types"
 import { optional } from "."
-import { getProps } from "./utils"
+import { keys } from "./utils"
 
 /**
- * Define a record type with optional properties only
+ * Convert all properties of T to optional
  */
-export const partial = <const T extends AnyRecord>(record: T): AsPartial<T> => Object.fromEntries(getProps(record).map(prop => [prop, optional(record[prop])])) as AsPartial<T>
+export const partial = <const T extends RecordDescriptor>(record: T): AsPartial<T> => Object.fromEntries(keys(record).map(prop => [prop, optional(record[prop])])) as AsPartial<T>

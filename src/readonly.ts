@@ -1,6 +1,6 @@
-import type { Any, AsReadonly, Property } from "./types"
+import type { AsReadonly, Descriptor, Property } from "./types"
 import { merge } from "."
-import { property } from "./utils"
+import { asProperty } from "./utils"
 
 interface ReadonlyFn {
   /**
@@ -11,15 +11,15 @@ interface ReadonlyFn {
   /**
    * Define a readonly property of T
    */
-  <const T extends Any | Property>(type: T): AsReadonly<T>
+  <const T extends Property | Descriptor>(type: T): AsReadonly<T>
 
   /**
    * Define a readonly property of T
    */
-  <const T extends Any | Property>(type?: T): AsReadonly<T | undefined>
+  <const T extends Property | Descriptor>(type?: T): AsReadonly<T | undefined>
 }
 
 /**
  * Define a readonly property
  */
-export const readonly: ReadonlyFn = <const T extends Any | Property>(type?: T): AsReadonly<T | undefined> => merge(property(type), { readonly: true as const })
+export const readonly: ReadonlyFn = <const T extends Property | Descriptor>(type?: T): AsReadonly<T | undefined> => merge(asProperty(type), { readonly: true as const })

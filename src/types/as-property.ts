@@ -1,16 +1,16 @@
-import type { Any, Property } from "."
+import type { Descriptor, Property } from "."
 
 /**
  * Construct from T a normalized property descriptor
  */
-export type AsProperty<T extends Any | Property | undefined> =
-  T extends { type: infer T extends Any, optional: true, readonly: true }
+export type AsProperty<T extends Property | Descriptor | undefined> =
+  T extends { type: infer T extends Descriptor, optional: true, readonly: true }
     ? { type: T, optional: true, readonly: true }
-    : T extends { type: infer T extends Any, optional: true }
+    : T extends { type: infer T extends Descriptor, optional: true }
       ? { type: T, optional: true }
-      : T extends { type: infer T extends Any, readonly: true }
+      : T extends { type: infer T extends Descriptor, readonly: true }
         ? { type: T, readonly: true }
-        : T extends { type: infer T extends Any }
+        : T extends { type: infer T extends Descriptor }
           ? { type: T }
           : T extends { optional: true, readonly: true }
             ? { optional: true, readonly: true }
@@ -18,6 +18,6 @@ export type AsProperty<T extends Any | Property | undefined> =
               ? { optional: true }
               : T extends { readonly: true }
                 ? { readonly: true }
-                : T extends Any
+                : T extends Descriptor
                   ? { type: T }
-                  : { type?: Any, optional?: true, readonly?: true }
+                  : { type?: Descriptor, optional?: true, readonly?: true }

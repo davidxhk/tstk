@@ -1,4 +1,5 @@
-import type { IsOptional, IsReadonly, Literal, PickOneAs, PropertyType, UnionToIntersection } from "."
+import type { IsOptional, IsReadonly, PickOneAs, PropertyType, UnionToIntersection } from "."
+import type { Literal } from "../utils"
 
 /**
  * Map properties in T to keys in M

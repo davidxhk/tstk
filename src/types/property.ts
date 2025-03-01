@@ -1,13 +1,13 @@
-import type { Any } from "."
+import type { Descriptor } from "."
 
 /**
- * A property descriptor that may contain a type and be marked optional and/or readonly
+ * A type descriptor that represents a property
  */
 export type Property =
-  { type: Any, optional: true, readonly: true } |
-  { type: Any, optional: true } |
-  { type: Any, readonly: true } |
-  { type: Any } |
+  { type: Descriptor, optional: true, readonly: true } |
+  { type: Descriptor, optional: true } |
+  { type: Descriptor, readonly: true } |
+  { type: Descriptor } |
   { optional: true, readonly: true } |
   { optional: true } |
   { readonly: true }

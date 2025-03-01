@@ -20,18 +20,7 @@ export { tuple } from "./tuple"
 export type * from "./types"
 export { union } from "./union"
 export {
-  isAny as any,
-  isAnyRecord as anyRecord,
-  isAnyTuple as anyTuple,
-  getProp,
-  getProps,
-  hasProp,
-  isObject as object,
-  property,
+  getValue as get,
+  keys,
   isPropertyKey as propertyKey,
-  isArray as someArray,
-  isClass as someClass,
-  isFunction as someFunction,
-  isLiteral as someLiteral,
-  isRecord as someRecord,
 } from "./utils"
