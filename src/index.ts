@@ -4,7 +4,6 @@ export { filter } from "./filter"
 export { has } from "./has"
 export { is } from "./is"
 export { joint } from "./joint"
-export { json } from "./json"
 export { literal } from "./literal"
 export { merge } from "./merge"
 export { omit } from "./omit"
@@ -20,7 +19,8 @@ export { tuple } from "./tuple"
 export type * from "./types"
 export { union } from "./union"
 export {
-  getValue as get,
+  get,
+  isJson as json,
   keys,
   isPropertyKey as propertyKey,
 } from "./utils"

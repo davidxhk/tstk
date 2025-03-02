@@ -1,4 +1,5 @@
 import type { IsOptional, IsReadonly, PickOneAs, PropertyType, UnionToIntersection } from "."
+import type { $optional, $readonly, $type } from "../symbols"
 import type { Literal } from "../utils"
 
 /**
@@ -13,9 +14,9 @@ export type Remap<T, M extends PickOneAs<T, PropertyKey>> =
   UnionToIntersection<
     { [K in keyof T]-?:
       PropertyType<K extends keyof M ? M[K] : K, {
-        type: Literal<T[K]>
-        optional: IsOptional<T, K>
-        readonly: IsReadonly<T, K>
+        [$type]: Literal<T[K]>
+        [$optional]: IsOptional<T, K>
+        [$readonly]: IsReadonly<T, K>
       }>
     }[keyof T]
   >

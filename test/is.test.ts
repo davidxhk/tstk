@@ -1,6 +1,7 @@
 import type { Descriptor } from "../src/types"
 import { describe, expect, it } from "vitest"
 import { array, is, joint, literal, optional, partial, pick, primitive, record, tuple, union } from "../src"
+import { $value } from "../src/symbols"
 import * as values from "./values"
 
 describe("the is function", () => {
@@ -44,7 +45,7 @@ describe("the is function", () => {
 
   it("can check for a specific symbol", () => values.symbols.forEach(symbol => expectIsTrue(symbol, symbol)))
 
-  it("can check for a literal value", () => values.literals.forEach(literal => expectIsTrue(literal, literal.value)))
+  it("can check for a literal value", () => values.literals.forEach(literal => expectIsTrue(literal, literal[$value])))
 
   it("can check for an instance of a class", () => {
     expectIsTrue(values.Class, values.instance)

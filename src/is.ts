@@ -1,5 +1,7 @@
 import type { Descriptor, Type } from "./types"
-import { isAny, isArray, isBigInt, isBoolean, isClass, isFunction, isInstance, isLiteral, isMatch, isNumber, isObject, isRecord, isString, isSymbol } from "./utils"
+import { assert } from "."
+import { $value } from "./symbols"
+import { isAny, isArray, isBigInt, isBoolean, isClass, isEqual, isFunction, isInstance, isLiteral, isMatch, isNull, isNumber, isObject, isRecord, isString, isSymbol, isUndefined } from "./utils"
 
 /**
  * Check if a value is T, allowing extra properties if exact is `false`
@@ -39,10 +41,10 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
           return isAny(value)
 
         case "null":
-          return value === null
+          return isNull(value)
 
         case "undefined":
-          return value === undefined
+          return isUndefined(value)
       }
 
     // eslint-disable-next-line no-fallthrough
@@ -50,7 +52,7 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
     case "bigint":
     case "boolean":
     case "symbol":
-      return value === type
+      return isEqual(value, type)
 
     case "function":
       if (isClass(type)) {
@@ -60,12 +62,12 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
       return type(value)
 
     case "object":
-      if (type === null) {
-        return value === null
+      if (isNull(type)) {
+        return isNull(value)
       }
 
       if (isLiteral(type)) {
-        return value === type.value
+        return isEqual(value, type[$value])
       }
 
       if (isRecord(type)) {
@@ -78,6 +80,6 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
 
     // eslint-disable-next-line no-fallthrough
     default:
-      throw new TypeError(`Invalid type: ${String(type)}`)
+      assert(false, `Invalid type: ${String(type)}`)
   }
 }

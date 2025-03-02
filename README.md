@@ -639,14 +639,14 @@ Below is a more comprehensive reference showing how to check for primitives, cla
 [`is(value, type, exact?)`](src/is.ts)\
 Check if `value` matches `type`, allowing extra properties if `exact` is false.
 
-[`has(value, prop, type?)`](src/has.ts)\
-Check if `value` has property `prop` that matches some optional `type`.
+[`has(value, prop, type?, exact?)`](src/has.ts)\
+Check if `value` has property `prop` that matches some optional `type`, allowing extra properties if `exact` is false.
 
 [`assert(condition, message)`](src/assert.ts)\
 Throw an error with `message` if `condition` is false.
 
 > [!TIP]
-> Combine `assert` with `is` to narrow types at runtime effectively.
+> Combine `assert` with `is` or `has` to narrow types at runtime effectively.
 > ```ts
 > assert(is(value, "string"), "Value must be a string")
 > value

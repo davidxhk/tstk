@@ -60,14 +60,14 @@ describe("the mergeObjects function", () => {
     expect(result).toEqual({ a: 100, b: 200, c: 3, d: 4, e: 5, f: 6 })
   })
 
-  it("does not mutate the original objects", () => {
+  it("mutates the target object", () => {
     const obj1 = { a: 1 }
     const obj2 = { b: 2 }
 
     const merged = merge(obj1, obj2)
 
-    expect(merged).toEqual({ a: 1, b: 2 })
-    expect(obj1).toEqual({ a: 1 })
+    expect(merged).toBe(obj1)
+    expect(obj1).toEqual({ a: 1, b: 2 })
     expect(obj2).toEqual({ b: 2 })
   })
 })
