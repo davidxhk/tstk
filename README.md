@@ -45,11 +45,7 @@ const value = JSON.parse("['hello', 42, 'world']")
 
 if (is(value, array(union("string", "number")))) {
   value
-  /**
-    ┌──────────────────────────────────┐
-    │ const value: (string | number)[] │
-    └──────────────────────────────────┘
-   */
+  // value: (string | number)[]
 }
 ```
 
@@ -74,11 +70,7 @@ For simple API responses, tstk cuts out the need to define and parse against a f
       const result = UserSchema.safeParse(data)
       if (result.success) {
         result.data
-        /**
-          ┌───────────────────────────────────────────────┐
-          │ (property) data: { id: number; name: string } │
-          └───────────────────────────────────────────────┘
-         */
+        // data: { id: number; name: string }
       }
     })
   ```
@@ -91,11 +83,7 @@ For simple API responses, tstk cuts out the need to define and parse against a f
     .then((data) => {
       if (is(data, { id: "number", name: "string" })) {
         data
-        /**
-          ┌──────────────────────────────────────────┐
-          │ const data: { id: number; name: string } │
-          └──────────────────────────────────────────┘
-         */
+        // data: { id: number; name: string }
       }
     })
   ```
@@ -120,11 +108,7 @@ When working with runtime data like URL query parameters in a Next.js applicatio
     const result = QuerySchema.safeParse(query)
     if (result.success) {
       result.data
-      /**
-        ┌─────────────────────────────────┐
-        │ (property) data: { id: number } │
-        └─────────────────────────────────┘
-       */
+      // data: { id: number }
     }
   }
   ```
@@ -139,11 +123,7 @@ When working with runtime data like URL query parameters in a Next.js applicatio
 
     if (is(query, { id: "string" })) {
       query
-      /**
-        ┌─────────────────────────────┐
-        │ const query: { id: string } │
-        └─────────────────────────────┘
-       */
+      // query: { id: string }
     }
   }
   ```
@@ -167,13 +147,7 @@ For data from sources like local storage where the shape isn't known until runti
       && typeof config.notifications === "boolean"
     ) {
       config
-      /**
-        ┌────────────────────────────────────┐
-        │ const config: object               │
-        │ & Record<"theme", unknown>         │
-        │ & Record<"notifications", unknown> │
-        └────────────────────────────────────┘
-       */
+      // config: object & Record<"theme", unknown> & Record<"notifications", unknown>
     }
   }
   ```
@@ -189,170 +163,64 @@ For data from sources like local storage where the shape isn't known until runti
       notifications: "boolean"
     })) {
       config
-      /**
-        ┌──────────────────────────────┐
-        │ const config: {              │
-        │     theme: "light" | "dark"; │
-        │     notifications: boolean;  │
-        │ }                            │
-        └──────────────────────────────┘
-       */
+      // config: { theme: "light" | "dark", notifications: boolean }
     }
   }
   ```
 
 ## Detailed Usage
 
-Below is a more comprehensive reference showing how to check for primitives, classes, unions, arrays, records, tuples, and even complex schemas.
+Below is a more comprehensive reference showing how to check for primitives, literals, classes, unions, arrays, records, tuples, and even complex schemas.
 
-- Primitive type: **"string"**
-  ```ts
-  if (is(value, "string")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: string │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"number"**
-  ```ts
-  if (is(value, "number")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: number │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"bigint"**
-  ```ts
-  if (is(value, "bigint")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: bigint │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"boolean"**
-  ```ts
-  if (is(value, "boolean")) {
-    value
-    /**
-      ┌──────────────────────┐
-      │ const value: boolean │
-      └──────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"symbol"**
-  ```ts
-  if (is(value, "symbol")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: symbol │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"object"**
-  ```ts
-  if (is(value, "object")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: object │
-      └─────────────────────┘
-     */
-  }
-  ```
+### Primitives
+
+Primitive types are represented by their literal strings. For instance, `string` is represented by `"string"`, while `number` is represented by `"number"`. Here are all supported primitive types:
+
+```ts
+is(value, "string") // value: string
+
+is(value, "number") // value: number
+
+is(value, "bigint") // value: bigint
+
+is(value, "boolean") // value: boolean
+
+is(value, "symbol") // value: symbol
+
+is(value, "object") // value: object
+
+is(value, "record") // value: Record<keyof any, unknown>
+
+is(value, "array") // value: readonly unknown[]
+
+is(value, "function") // value: (...args: unknown[]) => unknown
+
+is(value, "any") // value: any
+
+is(value, "null") // value: null
+
+is(value, "undefined") // value: undefined
+```
+
 > [!NOTE]
-> Unlike JavaScript's `typeof` operator, `is(value, "object")` includes **functions** (for which `typeof` returns "function") and excludes **null** (an infamous ~~bug~~ feature of `typeof`).
+> Unlike JavaScript's `typeof` operator, the "object" primitive includes **functions** and excludes **null**. Meanwhile, "record" matches plain objects only.
 > ```ts
 > is({}, "object") // true
 > is([], "object") // true
 > is(() => {}, "object") // true
-> is(null, false) // false
-> ```
-- Primitive type: **"record"**
-  ```ts
-  if (is(value, "record")) {
-    value
-    /**
-      ┌─────────────────────────────────────────┐
-      │ const value: Record<keyof any, unknown> │
-      └─────────────────────────────────────────┘
-     */
-  }
-  ```
-> [!TIP]
-> Use the "record" primitive to match a plain object only.
-> ```ts
+> is(null, "object") // false
+>
 > is({}, "record") // true
 > is([], "record") // false
 > is(() => {}, "record") // false
-> is(null, false) // false
+> is(null, "record") // false
 > ```
-- Primitive type: **"array"**
-  ```ts
-  if (is(value, "array")) {
-    value
-    /**
-      ┌─────────────────────────────────┐
-      │ const value: readonly unknown[] │
-      └─────────────────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"function"**
-  ```ts
-  if (is(value, "function")) {
-    value
-    /**
-      ┌──────────────────────────────────────────────┐
-      │ const value: (...args: unknown[]) => unknown │
-      └──────────────────────────────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"any"**
-  ```ts
-  if (is(value, "any")) {
-    value
-    /**
-      ┌──────────────────┐
-      │ const value: any │
-      └──────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"null"**
-  ```ts
-  if (is(value, "null")) {
-    value
-    /**
-      ┌───────────────────┐
-      │ const value: null │
-      └───────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"undefined"**
-  ```ts
-  if (is(value, "undefined")) {
-    value
-    /**
-      ┌────────────────────────┐
-      │ const value: undefined │
-      └────────────────────────┘
-     */
-  }
-  ```
+
+To see primitive types in action, check out the demo below!\
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/primitives?file=src%2Findex.ts&view=editor)
+
+### Literals
+
 - Literal type: **string** value
   ```ts
   if (is(value, "hello")) {
