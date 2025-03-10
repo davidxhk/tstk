@@ -46,5 +46,6 @@
     "scss",
     "pcss",
     "postcss"
-  ]
+  ],
+  "markdown.validate.enabled": true
 }

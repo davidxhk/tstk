@@ -1,6 +1,6 @@
-import { isType } from "."
+import { isPrimitive } from "."
 
 /**
- * Check if a value is a string
+ * Match strings
  */
-export const isString = (value: unknown): value is string => isType(value, "string")
+export const isString = (value: unknown): value is string => isPrimitive(value, "string")

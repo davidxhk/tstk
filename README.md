@@ -1,28 +1,44 @@
 # tstk
 > Type safety made simple.
 
-![npm version](https://img.shields.io/npm/v/tstk)
-![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/tstk)
-![npm license](https://img.shields.io/npm/l/tstk)
+**tstk** is a simple, minimal, and declarative runtime type-checking toolkit for TypeScript.
 
-**tstk** is a simple, minimal, and declarative runtime type-checking toolkit for TypeScript. Just like its name suggests, it provides small but powerful utilities that help you narrow types easily while handling all the type safety for you.
+Just like its name suggests, it provides small but powerful utilities that help you narrow types easily, while handling all the type safety for you.
 
 ## Why tstk?
 
-**_Neat_**\
-Tired of creating a schema for every single shape and size? Inline your type definitions with simple, composable functions like `is`, `array`, `record`, and `union`. Never hit _F12_ on your keyboard (Go to definition) again.
+**It's _Neat_**\
+Need something to be a string or a string array? Get this: `is(value, union("string", array("string")))`.
 
-**_Easy_**\
-Checking for a string or a string array? Here you go: `union("string", array("string"))`. Define your types with descriptors that mimic TypeScript as closely as possible. tstk handles the rest for you.
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/neat?file=src%2Findex.ts&view=editor)
 
-**_Tiny_**\
-With **zero** dependencies and a featherweight minzipped size, tstk keeps your bundle small. So you can install it guilt-free and ease your bundlephobia.
+tstk helps you validate unknown data in a **clean and maintainable** way.
+
+With tstk, you can inline your type definitions with simple and composable functions that look just like TypeScript.
+
+**It's _Easy_**\
+In tstk, schemas look like `[string, number]` or `{ name: string, age: number }` and are inferred with `Type<T>`.
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/easy?file=src%2Findex.ts&view=editor)
+
+tstk provides a **concise and effective method** to achieve type safety.
+
+tstk is also compatible with [Standard Schema V1](https://github.com/standard-schema/standard-schema), so you can use it with your existing zod or valibot schemas.
+
+**It's _Tiny_**\
+With _zero_ dependencies and a _featherweight_ minzipped size, tstk keeps your bundle small.
+
+![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/tstk)
+
+So you can install it guilt-free and ease your bundlephobia.
 
 If you need a **handy and lightweight** approach to runtime validation, tstk is built just for that.
 
 ## Install
 
 Use your preferred package manager to install [🧰tstk](https://www.npmjs.com/package/tstk) from the npm registry.
+
+![npm version](https://img.shields.io/npm/v/tstk)
 
 ```sh
 npm install tstk
@@ -36,470 +52,317 @@ yarn add tstk
 pnpm add tstk
 ```
 
-## Quick Example
+## Usage
+
+tstk allows you to check for a wide variety of types including [primitives](#primitives), [literals](#literals), [classes](#classes), [objects](#objects), [records](#records), [tuples](#tuples), [arrays](#arrays), [unions](#unions), [intersections](#intersections), and even [standard schemas](#standard-schemas).
+
+### Primitives
+
+Primitive types are represented by their literal strings such as "string" or "number".
+
+Notably, "object" includes **functions** and excludes **null** (unlike `typeof`).
 
 ```ts
-import { array, is, union } from "tstk"
+is({}, "object") // true
+is([], "object") // true
+is(() => {}, "object") // true
+is(null, "object") // false
+```
 
-const value = JSON.parse("['hello', 42, 'world']")
+Also, "record" matches plain objects only.
 
-if (is(value, array(union("string", "number")))) {
-  value
-  /**
-    ┌──────────────────────────────────┐
-    │ const value: (string | number)[] │
-    └──────────────────────────────────┘
-   */
+```ts
+is({}, "record") // true
+is([], "record") // false
+is(() => {}, "record") // false
+is(null, "record") // false
+```
+
+**Example**
+<a name="primitives-example"></a>
+
+```ts
+is(value, "string") // value: string
+
+is(value, "number") // value: number
+
+is(value, "bigint") // value: bigint
+
+is(value, "boolean") // value: boolean
+
+is(value, "symbol") // value: symbol
+
+is(value, "object") // value: object
+
+is(value, "record") // value: Record<keyof any, unknown>
+
+is(value, "array") // value: readonly unknown[]
+
+is(value, "function") // value: (...args: unknown[]) => unknown
+
+is(value, "any") // value: any
+
+is(value, "null") // value: null
+
+is(value, "undefined") // value: undefined
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/primitives?file=src%2Findex.ts&view=editor)
+
+### Literals
+
+Literal types are represented by their literal values.
+
+Any literal `string`, `number`, `bigint`, `boolean`, `symbol`, or `null` is supported.
+
+To match a literal primitive type like "string" or "number", use `literal(type)`.
+
+**Example**
+<a name="literals-example"></a>
+
+```ts
+is(value, "") // value: ""
+
+is(value, "foo") // value: "foo"
+
+is(value, 0) // value: 0
+
+is(value, 42) // value: 42
+
+is(value, 0n) // value: 0n
+
+is(value, 983498124981598n) // value: 983498124981598n
+
+is(value, true) // value: true
+
+is(value, false) // value: false
+
+const $a = Symbol("a")
+is(value, $a) // value: typeof $a
+
+const $b = Symbol.for("b")
+is(value, $b) // value: typeof $b
+
+is(value, null) // value: null
+
+is(value, literal("string")) // value: "string"
+
+is(value, literal("number")) // value: "number"
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/literals?file=src%2Findex.ts&view=editor)
+
+### Classes
+
+Classes match their instances. Native classes like `Date` are supported too.
+
+**Example**
+<a name="classes-example"></a>
+
+```ts
+class MyClass {}
+is(value, MyClass) // value: MyClass
+
+is(value, Date) // value: Date
+
+is(value, RegExp) // value: RegExp
+
+is(value, Map) // value: Map<unknown, unknown>
+
+is(value, Set) // value: Set<unknown>
+
+is(value, Promise) // value: Promise<unknown>
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/classes?file=src%2Findex.ts&view=editor)
+
+### Objects
+
+Objects match plain objects with the given properties and types.
+
+`optional(type)` marks a property as optional.
+
+```ts
+is({ foo: 1 }, { foo: optional("number") }) // true
+is({}, { foo: optional("number") }) // true
+```
+
+`readonly(type)` marks a property as readonly.
+
+```ts
+const value = { foo: 1 }
+is(value, { foo: readonly("number") }) // false
+
+Object.freeze(value)
+is(value, { foo: readonly("number") }) // true
+```
+
+By default, properties must be exact. Pass `false` to allow non-specified properties.
+
+```ts
+is({ foo: 1, bar: 2 }, { foo: "number" }) // false
+is({ foo: 1, bar: 2 }, { foo: "number" }, false) // true
+```
+
+**Example**
+<a name="objects-example"></a>
+
+```ts
+is(value, { id: "number", name: "string" }) // value: { id: number, name: string }
+
+is(value, { id: "number", name: optional("string") }) // value: { id: number, name?: string | undefined }
+
+is(value, { theme: "string" }) // value: { theme: string }
+
+is(value, { theme: readonly("string") }) // value: { readonly theme: string }
+
+is(value, { username: "string" }) // value: { username: string }
+
+is(value, { username: "string" }, false) // value: { username: string } (exact=false)
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/objects?file=src%2Findex.ts&view=editor)
+
+**Schemas**
+<a name="schemas"></a>
+
+To improve typing, use wrappers like `primitive(type)` and `literal(type)` or predicates like `string` and `number`.
+
+```ts
+import { boolean, literal, number, optional, primitive, string } from "tstk"
+
+const UserSchema = {
+  // Wrappers
+  type: literal("User"),
+  name: primitive("string"),
+  admin: optional("boolean"),
+
+  // Predicates
+  email: string,
+  age: number,
+  deleted: boolean,
 }
 ```
 
-## Use Cases
+`Type<T>` infers a schema's type.
 
-### 1. Validating API Responses
+```ts
+import type { Type } from "tstk"
 
-For simple API responses, tstk cuts out the need to define and parse against a full schema, enabling **clean and inline validation** that's easier to maintain and integrate into your data flow.
+type User = Type<typeof UserSchema>
+```
 
-- With zod
-  ```ts
-  import { z } from "zod"
+<details>
+<summary>Show <code>User</code> type</summary>
 
-  const UserSchema = z.object({
-    id: z.number(),
-    name: z.string(),
-  })
+```ts
+type User = {
+  type: "User"
+  name: string
+  admin?: boolean | undefined
+  email: string
+  age: number
+  deleted: boolean
+}
+```
+</details>
 
-  fetch("/api/users")
-    .then(res => res.json())
-    .then((data) => {
-      const result = UserSchema.safeParse(data)
-      if (result.success) {
-        result.data
-        /**
-          ┌───────────────────────────────────────────────┐
-          │ (property) data: { id: number; name: string } │
-          └───────────────────────────────────────────────┘
-         */
-      }
-    })
-  ```
-- With tstk
-  ```ts
-  import { is } from "tstk"
+Complex nested schemas are possible too.
 
-  fetch("/api/users")
-    .then(res => res.json())
-    .then((data) => {
-      if (is(data, { id: "number", name: "string" })) {
-        data
-        /**
-          ┌──────────────────────────────────────────┐
-          │ const data: { id: number; name: string } │
-          └──────────────────────────────────────────┘
-         */
-      }
-    })
-  ```
+```ts
+const UserSchema = {
+  userid: string,
+  name: string,
+  age: number,
+  email: string,
+  deleted: boolean,
+}
 
-### 2. Validating Dynamic Query Parameters
+const AddressSchema = record(["street", "city", "zipcode", "country"], "string")
 
-When working with runtime data like URL query parameters in a Next.js application, tstk offers a **direct and minimalistic approach** to validation without the extra overhead of creating a schema.
+const SettingsSchema = {
+  theme: union("light", "dark"),
+  notifications: partial(record(["email", "sms"], "boolean")),
+}
 
-- With zod
-  ```ts
-  import { useSearchParams } from "next/navigation"
-  import { z } from "zod"
+const RoleSchema = union("admin", "editor", "viewer")
 
-  const QuerySchema = z.object({
-    id: z.string(),
-  })
+const PostSchema = {
+  id: string,
+  title: string,
+  body: string,
+  attachment: optional("string"),
+  publishedAt: number,
+  tags: array("string"),
+}
 
-  function MyComponent() {
-    const searchParams = useSearchParams()
-    const query = Object.fromEntries(searchParams.entries())
+const FriendSchema = merge(
+  pick(UserSchema, ["userid", "name"]),
+  { startedAt: "number" },
+)
 
-    const result = QuerySchema.safeParse(query)
-    if (result.success) {
-      result.data
-      /**
-        ┌─────────────────────────────────┐
-        │ (property) data: { id: number } │
-        └─────────────────────────────────┘
-       */
+const ProfileSchema = {
+  user: UserSchema,
+  address: AddressSchema,
+  settings: SettingsSchema,
+  roles: array(RoleSchema),
+  posts: array(PostSchema),
+  friends: array(FriendSchema),
+}
+
+type Profile = Type<typeof ProfileSchema>
+```
+
+<details>
+<summary>Show <code>Profile</code> type</summary>
+
+```ts
+type Profile = {
+  user: {
+    userid: string
+    name: string
+    age: number
+    email: string
+    deleted: boolean
+  }
+  address: {
+    street: string
+    city: string
+    zipcode: string
+    country: string
+  }
+  settings: {
+    theme: "light" | "dark"
+    notifications: {
+      email?: boolean | undefined
+      sms?: boolean | undefined
     }
   }
-  ```
-- With tstk
-  ```ts
-  import { useSearchParams } from "next/navigation"
-  import { is } from "tstk"
+  roles: ("admin" | "editor" | "viewer")[]
+  posts: {
+    id: string
+    title: string
+    body: string
+    attachment?: string | undefined
+    publishedAt: number
+    tags: string[]
+  }[]
+  friends: {
+    userid: string
+    name: string
+    startedAt: number
+  }[]
+}
+```
+</details>
 
-  function MyComponent() {
-    const searchParams = useSearchParams()
-    const query = Object.fromEntries(searchParams.entries())
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/schemas?file=src%2Findex.ts&view=editor)
 
-    if (is(query, { id: "string" })) {
-      query
-      /**
-        ┌─────────────────────────────┐
-        │ const query: { id: string } │
-        └─────────────────────────────┘
-       */
-    }
-  }
-  ```
+### Records
 
-### 3. Validating Local Storage Data
+<details>
+<summary><i>todo</i></summary>
 
-For data from sources like local storage where the shape isn't known until runtime, tstk provides a **concise and effective method** to achieve type safety as opposed to manual type checking.
-
-- With `typeof`, etc.
-  ```ts
-  const data = localStorage.getItem("config")
-  if (data) {
-    const config = JSON.parse(data) as unknown
-    if (
-      config
-      && typeof config === "object"
-      && "theme" in config
-      && typeof config.theme === "string"
-      && ["light", "dark"].includes(config.theme)
-      && "notifications" in config
-      && typeof config.notifications === "boolean"
-    ) {
-      config
-      /**
-        ┌────────────────────────────────────┐
-        │ const config: object               │
-        │ & Record<"theme", unknown>         │
-        │ & Record<"notifications", unknown> │
-        └────────────────────────────────────┘
-       */
-    }
-  }
-  ```
-- With tstk
-  ```ts
-  import { is } from "tstk"
-
-  const data = localStorage.getItem("config")
-  if (data) {
-    const config = JSON.parse(data)
-    if (is(config, {
-      theme: union("light", "dark"),
-      notifications: "boolean"
-    })) {
-      config
-      /**
-        ┌──────────────────────────────┐
-        │ const config: {              │
-        │     theme: "light" | "dark"; │
-        │     notifications: boolean;  │
-        │ }                            │
-        └──────────────────────────────┘
-       */
-    }
-  }
-  ```
-
-## Detailed Usage
-
-Below is a more comprehensive reference showing how to check for primitives, classes, unions, arrays, records, tuples, and even complex schemas.
-
-- Primitive type: **"string"**
-  ```ts
-  if (is(value, "string")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: string │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"number"**
-  ```ts
-  if (is(value, "number")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: number │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"bigint"**
-  ```ts
-  if (is(value, "bigint")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: bigint │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"boolean"**
-  ```ts
-  if (is(value, "boolean")) {
-    value
-    /**
-      ┌──────────────────────┐
-      │ const value: boolean │
-      └──────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"symbol"**
-  ```ts
-  if (is(value, "symbol")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: symbol │
-      └─────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"object"**
-  ```ts
-  if (is(value, "object")) {
-    value
-    /**
-      ┌─────────────────────┐
-      │ const value: object │
-      └─────────────────────┘
-     */
-  }
-  ```
-> [!NOTE]
-> Unlike JavaScript's `typeof` operator, `is(value, "object")` includes **functions** (for which `typeof` returns "function") and excludes **null** (an infamous ~~bug~~ feature of `typeof`).
-> ```ts
-> is({}, "object") // true
-> is([], "object") // true
-> is(() => {}, "object") // true
-> is(null, false) // false
-> ```
-- Primitive type: **"record"**
-  ```ts
-  if (is(value, "record")) {
-    value
-    /**
-      ┌─────────────────────────────────────────┐
-      │ const value: Record<keyof any, unknown> │
-      └─────────────────────────────────────────┘
-     */
-  }
-  ```
-> [!TIP]
-> Use the "record" primitive to match a plain object only.
-> ```ts
-> is({}, "record") // true
-> is([], "record") // false
-> is(() => {}, "record") // false
-> is(null, false) // false
-> ```
-- Primitive type: **"array"**
-  ```ts
-  if (is(value, "array")) {
-    value
-    /**
-      ┌─────────────────────────────────┐
-      │ const value: readonly unknown[] │
-      └─────────────────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"function"**
-  ```ts
-  if (is(value, "function")) {
-    value
-    /**
-      ┌──────────────────────────────────────────────┐
-      │ const value: (...args: unknown[]) => unknown │
-      └──────────────────────────────────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"any"**
-  ```ts
-  if (is(value, "any")) {
-    value
-    /**
-      ┌──────────────────┐
-      │ const value: any │
-      └──────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"null"**
-  ```ts
-  if (is(value, "null")) {
-    value
-    /**
-      ┌───────────────────┐
-      │ const value: null │
-      └───────────────────┘
-     */
-  }
-  ```
-- Primitive type: **"undefined"**
-  ```ts
-  if (is(value, "undefined")) {
-    value
-    /**
-      ┌────────────────────────┐
-      │ const value: undefined │
-      └────────────────────────┘
-     */
-  }
-  ```
-- Literal type: **string** value
-  ```ts
-  if (is(value, "hello")) {
-    value
-    /**
-      ┌──────────────────────┐
-      │ const value: "hello" │
-      └──────────────────────┘
-     */
-  }
-  ```
-- Literal type: **number** value
-  ```ts
-  if (is(value, 42)) {
-    value
-    /**
-      ┌─────────────────┐
-      │ const value: 42 │
-      └─────────────────┘
-     */
-  }
-  ```
-- Literal type: **bigint** value
-  ```ts
-  if (is(value, 21n)) {
-    value
-    /**
-      ┌──────────────────┐
-      │ const value: 21n │
-      └──────────────────┘
-     */
-  }
-  ```
-- Literal type: **boolean** value
-  ```ts
-  if (is(value, true)) {
-    value
-    /**
-      ┌───────────────────┐
-      │ const value: true │
-      └───────────────────┘
-     */
-  }
-  ```
-- Literal type: **symbol** value
-  ```ts
-  const $foo = Symbol("foo")
-  if (is(value, symbol)) {
-    value
-    /**
-      ┌──────────────────────────┐
-      │ const value: typeof $foo │
-      └──────────────────────────┘
-     */
-  }
-  ```
-- Literal type: **null** value
-  ```ts
-  if (is(value, null)) {
-    value
-    /**
-      ┌───────────────────┐
-      │ const value: null │
-      └───────────────────┘
-     */
-  }
-  ```
-- Literal type: `literal` value
-  ```ts
-  if (is(value, literal("string"))) {
-    value
-    /**
-      ┌───────────────────────┐
-      │ const value: "string" │
-      └───────────────────────┘
-     */
-  }
-  ```
-> [!TIP]
-> Use `literal` to match a literal primitive type like "string" or "number".
-- **Class** type
-  ```ts
-  if (is(value, Date)) {
-    value
-    /**
-      ┌───────────────────┐
-      │ const value: Date │
-      └───────────────────┘
-     */
-  }
-  ```
-- **Union** type
-  ```ts
-  if (is(value, union("string", "number"))) {
-    value
-    /**
-      ┌──────────────────────────────┐
-      │ const value: string | number │
-      └──────────────────────────────┘
-     */
-  }
-  ```
-- **Joint** type
-  ```ts
-  if (is(value, joint({ foo: "string" }, { bar: "number" }))) {
-    value
-    /**
-      ┌───────────────────────────────────────────┐
-      │ const value: { foo: string; bar: number } │
-      └───────────────────────────────────────────┘
-     */
-  }
-  ```
-- **Array** type
-  ```ts
-  if (is(value, array("string"))) {
-    value
-    /**
-      ┌───────────────────────┐
-      │ const value: string[] │
-      └───────────────────────┘
-     */
-  }
-  ```
-- **Tuple** type
-  ```ts
-  if (is(value, ["string", "number"])) {
-    value
-    /**
-      ┌───────────────────────────────┐
-      │ const value: [string, number] │
-      └───────────────────────────────┘
-     */
-  }
-  ```
-> [!NOTE]
-> `tuple` can also be used to define a tuple type.
-> ```ts
-> if (is(value, tuple("string", "number"))) {
->   value
->   /**
->     ┌───────────────────────────────┐
->     │ const value: [string, number] │
->     └───────────────────────────────┘
->    */
-> }
-> ```
 - Record type: **collective** keys
   ```ts
   if (is(value, record("string", "number"))) {
@@ -522,115 +385,110 @@ Below is a more comprehensive reference showing how to check for primitives, cla
      */
   }
   ```
-- Simple schema
-  ```ts
-  if (is(value, { foo: "string" })) {
-    value
-    /**
-      ┌──────────────────────────────┐
-      │ const value: { foo: string } │
-      └──────────────────────────────┘
-     */
-  }
-  ```
-> [!NOTE]
-> By default, `is` does an exact match on the schema. To allow extra properties, pass `false` as the third argument.
-> ```ts
-> is({ foo: 1, bar: 2 }, { foo: "number" }) // false
-> is({ foo: 1, bar: 2 }, { foo: "number" }, false) // true
-> ```
-- Complex schema
-  ```ts
-  if (is(value, Profile)) {
-    value
-    /**
-      ┌───────────────────────────────────────────────┐
-      │ const value: {                                │
-      │     user: {                                   │
-      │         userid: string;                       │
-      │         name: string;                         │
-      │         age: number;                          │
-      │         email: string;                        │
-      │         deleted: boolean;                     │
-      │     };                                        │
-      │     address: {                                │
-      │         street: string;                       │
-      │         city: string;                         │
-      │         zipcode: string;                      │
-      │         country: string;                      │
-      │     };                                        │
-      │     settings: {                               │
-      │         theme: "light" | "dark";              │
-      │         notifications: {                      │
-      │             email?: boolean | undefined;      │
-      │             sms?: boolean | undefined;        │
-      │         };                                    │
-      │     };                                        │
-      │     roles: ("admin" | "editor" | "viewer")[]; │
-      │     posts: {                                  │
-      │         id: string;                           │
-      │         title: string;                        │
-      │         body: string;                         │
-      │         attachment?: string | undefined;      │
-      │         publishedAt: number;                  │
-      │         tags: string[];                       │
-      │     }[];                                      │
-      │     friends: {                                │
-      │         userid: string;                       │
-      │         name: string;                         │
-      │         startedAt: number;                    │
-      │     }[];                                      │
-      │ }                                             │
-      └───────────────────────────────────────────────┘
-     */
-  }
-  ```
-
-<details>
-  <summary>Show <code>Profile</code> schema</summary>
-
-  ```ts
-  const User = {
-    userid: primitive("string"),
-    name: primitive("string"),
-    age: primitive("number"),
-    email: primitive("string"),
-    deleted: primitive("boolean"),
-  }
-
-  const Address = record(["street", "city", "zipcode", "country"], "string")
-
-  const Settings = {
-    theme: union("light", "dark"),
-    notifications: partial(record(["email", "sms"], "boolean")),
-  }
-
-  const Role = union("admin", "editor", "viewer")
-
-  const Post = {
-    id: primitive("string"),
-    title: primitive("string"),
-    body: primitive("string"),
-    attachment: optional("string"),
-    publishedAt: primitive("number"),
-    tags: array("string"),
-  }
-
-  const Friend = joint(
-    pick(User, ["userid", "name"]),
-    { startedAt: primitive("number") },
-  )
-
-  const Profile = {
-    user: User,
-    address: Address,
-    settings: Settings,
-    roles: array(Role),
-    posts: array(Post),
-    friends: array(Friend),
-  }
-  ```
 </details>
+
+> [!NOTE]
+> A _collective_ record such as `record("string", "number")` checks that every prop matches `props`.
+>
+> A _concrete_ record such as `record(["foo", "bar"], "number")` checks that all `props` are present.
+
+> [!NOTE]
+> `partial` works with concrete records or schemas only.
+> ```ts
+> const Foo = partial(record(["foo"], "number"))
+> type FooType = Type<typeof Foo> // FooType: { foo?: number | undefined }
+>
+> const Bar = partial({ bar: number })
+> type BarType = Type<typeof Bar> // BarType: { bar?: number | undefined }
+> ```
+
+### Tuples
+
+Tuples match fixed-length arrays with the given types in each position.
+
+**Example**
+<a name="tuples-example"></a>
+
+```ts
+is(value, ["string", "number"]) // value: [string, number]
+
+is(value, ["number", "number", "number"]) // value: [number, number, number]
+
+is(value, ["object", "function"]) // value: [object, (...args: unknown[]) => unknown]
+
+is(value, [Date, Date]) // value: [Date, Date]
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/tuples?file=src%2Findex.ts&view=editor)
+
+### Arrays
+
+`array(type)` matches arrays of any length with the given type.
+
+**Example**
+<a name="arrays-example"></a>
+
+```ts
+is(value, array("number")) // value: number[]
+
+is(value, array("string")) // value: string[]
+
+is(value, array(Date)) // value: Date[]
+
+is(value, array(union(0, 1))) // value: (0 | 1)[]
+
+is(value, array(union("foo", "bar", "baz"))) // value: ("foo" | "bar" | "baz")[]
+
+is(value, array({ action: "string", payload: "any" })) // value: { action: string, payload: any }[]
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/arrays?file=src%2Findex.ts&view=editor)
+
+### Unions
+
+`union(...types)` represents a type union.
+
+**Example**
+<a name="unions-example"></a>
+
+```ts
+is(value, union("string", "number")) // value: string | number
+
+is(value, union("string", array("string"))) // value: string | string[]
+
+is(value, union("string", "number", "symbol")) // value: string | number | symbol
+
+is(value, union("foo", "bar", "baz")) // value: "foo" | "bar" | "baz"
+
+is(value, union("number", null)) // value: number | null
+
+is(value, union("boolean", "true", "false", 0, 1)) // value: boolean | 0 | 1 | "true" | "false"
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/unions?file=src%2Findex.ts&view=editor)
+
+### Intersections
+
+`merge(...objects)` combines object types with a shallow merge.
+
+Alternatively, `joint(...types)` defines an intersection of any type.
+
+**Example**
+<a name="intersections-example"></a>
+
+```ts
+is(value, merge({ name: "string" }, { age: "number" })) // value: { name: string, age: number }
+
+is(value, merge({ id: "number" }, { email: optional("string") })) // value: { id: number, email?: string | undefined }
+
+is(value, joint({ user: { name: "string" } }, { user: { age: "number" } })) // value: { user: { name: string } & { age: number } }
+```
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/davidxhk/tstk/tree/main/examples/intersections?file=src%2Findex.ts&view=editor)
+
+### Standard Schemas
+
+_todo_
 
 ## API
 
@@ -645,63 +503,13 @@ Check if `value` has property `prop` that matches some optional `type`, allowing
 [`assert(condition, message)`](src/assert.ts)\
 Throw an error with `message` if `condition` is false.
 
-> [!TIP]
-> Combine `assert` with `is` or `has` to narrow types at runtime effectively.
-> ```ts
-> assert(is(value, "string"), "Value must be a string")
-> value
-> /**
->   ┌─────────────────────┐
->   │ const value: string │
->   └─────────────────────┘
->  */
-> ```
-
 ### Type Descriptors
 
 [`primitive(type)`](src/primitive.ts)\
 Define a primitive type such as "string" or "number".
 
-> [!TIP]
-> Use `primitive` to define a primitive property in a schema.
-> ```ts
-> const Foo = { foo: primitive("number") }
-> /**
->   ┌──────────────────────────────┐
->   │ const Foo: { foo: "number" } │
->   └──────────────────────────────┘
->  */
-> if (is(value, Foo)) {
->   value
->   /**
->     ┌──────────────────────────────┐
->     │ const value: { foo: number } │
->     └──────────────────────────────┘
->    */
-> }
-> ```
-
 [`literal(type)`](src/literal.ts)\
 Define a literal type such as `literal("hello")` or `literal(42)`.
-
-> [!TIP]
-> Use `literal` to define a literal property in a schema and/or to match a literal primitive type.
-> ```ts
-> const Bar = { bar: literal("number") }
-> /**
->   ┌───────────────────────────────────────┐
->   │ const Bar: { bar: Literal<"number"> } │
->   └───────────────────────────────────────┘
->  */
-> if (is(value, Bar)) {
->   value
->   /**
->     ┌────────────────────────────────┐
->     │ const value: { bar: "number" } │
->     └────────────────────────────────┘
->    */
-> }
-> ```
 
 [`union(...types)`](src/union.ts)\
 Define a union type that matches _one of_ `types`.
@@ -713,24 +521,13 @@ Define a joint type that matches _all of_ `types`.
 Define an array type where every element matches `type`.
 
 [`tuple(...types)`](src/tuple.ts)\
-Define a tuple type where every element matches the corresponding type in `types`.
-
-> [!IMPORTANT]
-> The length must be **exactly** the same as `types`.
+Define a tuple type matching `types` in length and types.
 
 [`record(props, type)`](src/record.ts)\
 Define a record type that matches a plain object with `props`, where all values match `type`.
 
-> [!NOTE]
-> A _collective_ record such as `record("string", "number")` checks that every prop matches `props`.
->
-> A _concrete_ record such as `record(["foo", "bar"], "number")` checks that all `props` are present.
-
 [`partial(record)`](src/partial.ts)\
 Convert all properties of `record` to optional.
-
-> [!NOTE]
-> `partial` only works with concrete records or schemas. To create a partial collective schema, wrap the value type in `optional` instead.
 
 [`optional(type)`](src/optional.ts)\
 Define an optional property that matches `type`.
@@ -738,16 +535,40 @@ Define an optional property that matches `type`.
 [`readonly(type)`](src/readonly.ts)\
 Define a readonly property that matches `type`.
 
-### Utility Functions
+[`string(value)`](src/utils/is-string.ts)\
+Check if `value` is a string.
 
-[`json(value)`](src/json.ts)\
+[`number(value)`](src/utils/is-number.ts)\
+Check if `value` is a number.
+
+[`bigint(value)`](src/utils/is-bigint.ts)\
+Check if `value` is a bigint.
+
+[`boolean(value)`](src/utils/is-boolean.ts)\
+Check if `value` is a boolean.
+
+[`symbol(value)`](src/utils/is-symbol.ts)\
+Check if `value` is a symbol.
+
+[`object(value)`](src/utils/is-object.ts)\
+Check if `value` is an object.
+
+[`function_(value)`](src/utils/is-function.ts)\
+Check if `value` is a function.
+
+[`any(value)`](src/utils/is-any.ts)\
+This is effectively a no-op.
+
+[`json(value)`](src/utils/is-json.ts)\
 Check if `value` is a JSON value.
 
 [`propertyKey(value)`](src/utils/is-property-key.ts)\
 Check if `value` is a property key.
 
-[`get(object, prop)`](src/utils/get-value.ts)\
-Get the value of `prop` for `object`, binding to `object` if applicable.
+### Utility Functions
+
+[`get(object, prop)`](src/utils/get.ts)\
+Get the value of `prop` for `object`, binding functions if applicable.
 
 [`keys(object)`](src/utils/keys.ts)\
 Get all property keys of `object`, casting to integers if applicable.
@@ -767,8 +588,8 @@ Return a new object excluding `props` from the original.
 [`remap(object, mapping)`](src/remap.ts)\
 Return a new object whose keys are remapped using `mapping`.
 
-[`merge(target, ...sources)`](src/merge.ts)\
-Copy properties from each source into target, with last taking precedence.
+[`merge(...objects)`](src/merge.ts)\
+Return a new object merged from all `objects`, with last taking precedence.
 
 ## Contributing
 

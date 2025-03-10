@@ -1,5 +1,6 @@
 import type { Descriptor } from "../src/types"
 import { describe, expect, it } from "vitest"
+import { z } from "zod"
 import { array, is, joint, literal, optional, partial, pick, primitive, record, tuple, union } from "../src"
 import { $value } from "../src/symbols"
 import * as values from "./values"
@@ -200,9 +201,16 @@ describe("the is function", () => {
 
     expect(is(data, Profile)).toBe(true)
   })
-})
 
-it("allows extra properties if exact is false", () => {
-  expect(is({ foo: 1, bar: 2 }, { foo: "number" })).toBe(false)
-  expect(is({ foo: 1, bar: 2 }, { foo: "number" }, false)).toBe(true)
+  it("allows extra properties if exact is false", () => {
+    expect(is({ foo: 1, bar: 2 }, { foo: "number" })).toBe(false)
+    expect(is({ foo: 1, bar: 2 }, { foo: "number" }, false)).toBe(true)
+  })
+
+  it("supports standard schema v1", () => {
+    const zodSchema = z.object({ a: z.string(), b: z.number(), c: z.boolean() })
+
+    expect(is({ a: "a", b: 1, c: true }, zodSchema)).toBe(true)
+    expect(is({ a: "a", b: "2", c: true }, zodSchema)).toBe(false)
+  })
 })

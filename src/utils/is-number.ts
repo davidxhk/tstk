@@ -1,6 +1,6 @@
-import { isType } from "."
+import { isPrimitive } from "."
 
 /**
- * Check if a value is a number
+ * Match numbers
  */
-export const isNumber = (value: unknown): value is number => isType(value, "number")
+export const isNumber = (value: unknown): value is number => isPrimitive(value, "number")

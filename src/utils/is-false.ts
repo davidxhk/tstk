@@ -1,6 +1,6 @@
 import { isEqual } from "."
 
 /**
- * Check if a value is false
+ * Match false
  */
 export const isFalse = (value: unknown): value is false => isEqual(value, false)

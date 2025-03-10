@@ -1,6 +1,6 @@
 import { isEqual } from "."
 
 /**
- * Check if a value is undefined
+ * Match undefined
  */
 export const isUndefined = (value: unknown): value is undefined => isEqual(value, undefined)

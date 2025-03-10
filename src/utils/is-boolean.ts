@@ -1,6 +1,6 @@
-import { isType } from "."
+import { isPrimitive } from "."
 
 /**
- * Check if a value is a boolean
+ * Match booleans
  */
-export const isBoolean = (value: unknown): value is boolean => isType(value, "boolean")
+export const isBoolean = (value: unknown): value is boolean => isPrimitive(value, "boolean")
