@@ -1,7 +1,7 @@
 import type { SomeRecord } from "../types"
-import { isEqual, isNull, isType } from "."
+import { isEqual, isNull, isPrimitive } from "."
 
 /**
- * Check if a value is a record
+ * Match records
  */
-export const isRecord = (value: unknown): value is SomeRecord => isType(value, "object") && !isNull(value) && (isEqual(value.constructor, Object) || isType(value.constructor, "undefined"))
+export const isRecord = (value: unknown): value is SomeRecord => isPrimitive(value, "object") && !isNull(value) && (isEqual(value.constructor, Object) || isPrimitive(value.constructor, "undefined"))

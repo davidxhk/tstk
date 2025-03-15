@@ -1,6 +1,6 @@
-import { isType } from "./is-type"
+import { isPrimitive } from "./is-primitive"
 
 /**
- * Check if a value is a symbol
+ * Match symbols
  */
-export const isSymbol = (value: unknown): value is symbol => isType(value, "symbol")
+export const isSymbol = (value: unknown): value is symbol => isPrimitive(value, "symbol")

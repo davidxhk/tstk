@@ -1,7 +1,7 @@
 import type { SomeFunction } from "../types"
-import { isType } from "."
+import { isPrimitive } from "."
 
 /**
- * Check if a value is a function
+ * Match functions
  */
-export const isFunction = (value: unknown): value is SomeFunction => isType(value, "function")
+export const isFunction = (value: unknown): value is SomeFunction => isPrimitive(value, "function")

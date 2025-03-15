@@ -1,6 +1,6 @@
 import { isNumber, isString, isSymbol } from "."
 
 /**
- * Check if a value is a property key
+ * Match property keys
  */
 export const isPropertyKey = (value: unknown): value is PropertyKey => isString(value) || isNumber(value) || isSymbol(value)

@@ -1,10 +1,10 @@
 import type { Descriptor, Type } from "./types"
 import { assert } from "."
 import { $value } from "./symbols"
-import { isAny, isArray, isBigInt, isBoolean, isClass, isEqual, isFunction, isInstance, isLiteral, isMatch, isNull, isNumber, isObject, isRecord, isString, isSymbol, isUndefined } from "./utils"
+import { isAny, isArray, isBigInt, isBoolean, isClass, isEqual, isFunction, isInstance, isLiteral, isNull, isNumber, isObject, isRecord, isStandardSchemaV1, isString, isSymbol, isUndefined, matchesPredicate, matchesRecord, matchesStandardSchemaV1, matchesTuple } from "./utils"
 
 /**
- * Check if a value is T, allowing extra properties if exact is `false`
+ * Match type T
  */
 export function is<const T extends Descriptor>(value: unknown, type: T, exact = true): value is Type<T> {
   switch (typeof type) {
@@ -59,7 +59,7 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
         return isInstance(value, type)
       }
 
-      return type(value)
+      return matchesPredicate(value, type)
 
     case "object":
       if (isNull(type)) {
@@ -70,12 +70,16 @@ export function is<const T extends Descriptor>(value: unknown, type: T, exact = 
         return isEqual(value, type[$value])
       }
 
+      if (isStandardSchemaV1(type)) {
+        return matchesStandardSchemaV1(value, type)
+      }
+
       if (isRecord(type)) {
-        return isRecord(value) && isMatch(value, type, exact)
+        return matchesRecord(value, type, exact)
       }
 
       if (isArray(type)) {
-        return isArray(value) && isMatch(value, type, true)
+        return matchesTuple(value, type, exact)
       }
 
     // eslint-disable-next-line no-fallthrough

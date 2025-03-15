@@ -1,6 +1,6 @@
-import { isType } from "."
+import { isPrimitive } from "."
 
 /**
- * Check if a value is a bigint
+ * Match bigints
  */
-export const isBigInt = (value: unknown): value is bigint => isType(value, "bigint")
+export const isBigInt = (value: unknown): value is bigint => isPrimitive(value, "bigint")

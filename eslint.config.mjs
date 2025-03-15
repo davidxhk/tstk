@@ -12,6 +12,16 @@ export default antfu({
     indent: 2,
     quotes: "double",
   },
+  markdown: {
+    overrides: {
+      "ts/consistent-type-definitions": "off",
+    },
+  },
+}, {
+  files: ["examples/**/*.ts"],
   rules: {
+    "no-console": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unused-imports/no-unused-vars": "off",
   },
 })

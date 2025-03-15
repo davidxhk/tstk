@@ -19,8 +19,16 @@ export { tuple } from "./tuple"
 export type * from "./types"
 export { union } from "./union"
 export {
+  isAny as any,
+  isBigInt as bigint,
+  isBoolean as boolean,
+  isFunction as function_,
   get,
   isJson as json,
   keys,
+  isNumber as number,
+  isObject as object,
   isPropertyKey as propertyKey,
+  isString as string,
+  isSymbol as symbol,
 } from "./utils"

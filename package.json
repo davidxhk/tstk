@@ -1,7 +1,7 @@
 {
   "name": "tstk",
   "type": "module",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Type safety made simple.",
   "author": "David Xie",
   "license": "MIT",
@@ -46,6 +46,7 @@
     "eslint": "^9.19.0",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.4"
+    "vitest": "^3.0.4",
+    "zod": "^3.24.2"
   }
 }

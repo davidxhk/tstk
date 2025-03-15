@@ -1,6 +1,6 @@
-import { isNull, isType } from "."
+import { isNull, isPrimitive } from "."
 
 /**
- * Check if a value is an object
+ * Match objects
  */
-export const isObject = (value: unknown): value is object => (isType(value, "object") && !isNull(value)) || isType(value, "function")
+export const isObject = (value: unknown): value is object => (isPrimitive(value, "object") && !isNull(value)) || isPrimitive(value, "function")
